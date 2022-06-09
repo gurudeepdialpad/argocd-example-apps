@@ -1,0 +1,97 @@
+global:
+  fstEnv: dev
+  containerRegistry: gcr.io/fststaging
+  mountSource: true
+  janus: false
+  # mountRackman, mountFS and mountPlivo are dummy here.
+  # These values will come from localdev Makefile
+  mountRackman: false
+  mountFS: false
+  mountPlivo: false
+
+fstVersion: latest
+replicaCount: 1
+localRegistryIP: 10.96.1.4
+fstTelephonyBackendKey: fomo
+fstSecretKey: fomo
+releaseName: local
+spinnakerRequestId: spinnaker-dev
+progressDeadlineSeconds: 600
+
+smsGateway:
+  machineGroup: smsgw-staging
+  smsCarriers: firespotter,sms_injector,bandwidth,bandwidth_mms,voxbone
+  replicaCount: 1
+  limits:
+    memory: 256Mi
+    cpu: 0.1
+  requests:
+    memory: 256Mi
+    cpu: 0.1
+
+prober:
+  replicaCount: 1
+  limits:
+    memory: 50Mi
+    cpu: 0.1
+  requests:
+    memory: 50Mi
+    cpu: 0.1
+
+rackman:
+  limits:
+    memory: 256Mi
+    cpu: 0.1
+  requests:
+    memory: 256Mi
+    cpu: 0.1
+
+freeswitch:
+  containerIdentifier: fst-freeswitch
+  requests:
+    memory: 256Mi
+    cpu: 0.2
+
+janus:
+  containerIdentifier: fst-janus
+  requests:
+    memory: 256Mi
+    cpu: 0.2
+
+vector:
+  apps: []
+
+telephonyEngine:
+  replicaCount: 1
+  # please add RTP ports in helm chart and service instead of here.
+  teRTPEndPort: 24575
+  janusRTPPortCount: 3
+  janusRTPPortRange: "24576-24578"
+  tePool: DevPool
+
+sbc:
+  replicaCount: 1
+  limits:
+    memory: 256Mi
+    cpu: 0.2
+  requests:
+    memory: 256Mi
+    cpu: 0.2
+
+datadogagent:
+  limits:
+    memory: 256Mi
+    cpu: 0.1
+  requests:
+    memory: 256Mi
+    cpu: 0.1
+
+kubeStateMetrics:
+  clusterName: kube-local-dev
+  replicaCount: 1
+  limits:
+    memory: 512Mi
+    cpu: 200m
+  requests:
+    memory: 512Mi
+    cpu: 200m

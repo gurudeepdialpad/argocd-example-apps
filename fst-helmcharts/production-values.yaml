@@ -1,0 +1,132 @@
+global:
+  fstEnv: prod
+  containerRegistry: gcr.io/fstelephony
+  projectId: fstelephony
+  mountSource: false
+  mountFS: false
+  mountPlivo: false
+  janus: true
+
+fstVersion: latest
+fstHost: fstelephony.appspot.com
+fstSecretKey: r0dTprAa40q1MlR7RbcSeGa13zp5O0lo
+releaseName: production
+spinnakerRequestId: spinnaker-production
+fstTelephonyBackendKey: TEe4iH0obEz3c30xgl1b7XHoYT34vbB8
+progressDeadlineSeconds: 18000
+
+smsGateway:
+  projectEmail: 312372752879-85d0i2v65ol2kt0me8tadh27be7inf5e@developer.gserviceaccount.com
+  projectBucket: fstelephony_mms
+  machineGroup: smsgw-production
+  smsCarriers: bandwidth,bandwidth_mms,inteliquent,inteliquent_mms,voxbone
+  replicaCount: 2
+  limits:
+    memory: 4Gi
+    cpu: 1
+  requests:
+    memory: 2Gi
+    cpu: 1
+  containerIdentifier: fst-smsgateway
+
+prober:
+  projectEmail: 312372752879-85d0i2v65ol2kt0me8tadh27be7inf5e@developer.gserviceaccount.com
+  replicaCount: 1
+  limits:
+    memory: 1Gi
+    cpu: 4
+  requests:
+    memory: 1Gi
+    cpu: 4
+  containerIdentifier: fst-prober
+
+siplogger:
+  GOMAXPROCS: 4
+  limits:
+    memory: 512Mi
+    cpu: 1
+  requests:
+    memory: 512Mi
+    cpu: 1
+  containerIdentifier: fst-siplogger
+
+rackman:
+  limits:
+    memory: 2Gi
+    cpu: 1
+  requests:
+    memory: 1Gi
+    cpu: 1
+  containerIdentifier: fst-rackman
+
+envoy:
+  limits:
+    memory: 512Mi
+    cpu: 1
+  requests:
+    memory: 512Mi
+    cpu: 1
+  containerIdentifier: fst-envoy
+
+freeswitch:
+  containerIdentifier: fst-freeswitch
+  requests:
+    memory: 10Gi
+    cpu: 14
+
+janus:
+  containerIdentifier: fst-janus
+  requests:
+    memory: 10Gi
+    cpu: 13
+
+plivo:
+  containerIdentifier: fst-plivo
+
+voipmonitor:
+  containerIdentifier: fst-voipmonitor
+
+vector:
+  apps:
+    - TelephonyEngine
+    - SmsGateway
+    - Prober
+    - BorderController
+
+# See TEL-15515 for details
+telephonyEngine:
+  replicaCount: 1
+  teRTPEndPort: 24575
+  janusRTPPortRange: "24576-32768"
+  tePool: UberPool
+
+# Below resources are temporary to test sbci. These values will be adjusted in TEL-14877
+sbc:
+  replicaCount: 1
+  limits:
+    memory: 1907Mi
+    cpu: 2
+  requests:
+    memory: 1907Mi
+    cpu: 2
+
+datadogagent:
+  gomaxprocs: 1
+  limits:
+    memory: 1Gi
+    cpu: 1
+  requests:
+    memory: 1Gi
+    cpu: 1
+
+kubeStateMetrics:
+  clusterName: kube-api-production
+  replicaCount: 1
+  # kube-state-metrics resource requirements are mentioned in below link
+  # https://github.com/kubernetes/kube-state-metrics
+  limits:
+    memory: 512Mi
+    cpu: 200m
+  requests:
+    memory: 512Mi
+    cpu: 200m
